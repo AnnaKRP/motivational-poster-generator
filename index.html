@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Motivational Poster</title>
+        <link rel="stylesheet" href="./public/style.css">
+    </head>
+    <body>
+
+        <button id="refreshButton"> ↻ </button>
+
+        <div class="imageContainer">
+            <a id="imgLink" href="#"><img alt="Random Image" id="ranImg" src="" /></a>
+        </div>
+
+        <div class="quoteContainer">
+            <p><span id="quote">Loading quote...</span></p>
+        </div>
+
+        <script>
+            function fetchImage() {
+                fetch('/api/random-content')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error fetching image and quote data');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        document.getElementById('ranImg').src = data.url;
+                        document.getElementById('imgLink').href = data.link;
+                        document.getElementById('quote').textContent = data.quote || 'Quote unavailable';
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        document.getElementById('ranImg').src = '';
+                        document.getElementById('imgLink').href = '#';
+                        document.getElementById('quote').textContent = 'Error loading quote';
+                    });
+            }
+
+            document.getElementById('refreshButton').addEventListener('click', fetchImage);
+            fetchImage();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Alkalami&family=Fondamento:ital@0;1&family=Fugaz+One&display=swap');
+
+body {
+    background-color: #232323;
+    color: #DBDBDB;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #ranImg {
+    height: 400px;
+    width: 600px;
+    object-fit: cover;
+    outline: 3px solid #DBDBDB;
+    outline-offset: 5px;
+    margin: 15% auto 20px auto;  
+    display: block;    
+}
+
+.quoteContainer {
+  font-size: 32px;
+  font-family: "Fondamento", cursive;
+  width: 60%;
+  text-align: center;
+}
+
+#refreshButton {
+  background-color: #232323;
+  position: fixed;
+  top: 0;
+  right: 0;
+  margin: 20px;
+  font-size: 50px;
+  border: none;
+  color: #DBDBDB;
+}
