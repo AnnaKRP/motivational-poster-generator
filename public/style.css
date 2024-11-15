@@ -3,6 +3,7 @@
 body {
     background-color: #232323;
     color: #DBDBDB;
+    font-family: "Fondamento", cursive;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -21,18 +22,30 @@ body {
 
 .quoteContainer {
   font-size: 32px;
-  font-family: "Fondamento", cursive;
   width: 60%;
   text-align: center;
 }
 
 #refreshButton {
   background-color: #232323;
+  font-family: "Fondamento", cursive;
+  box-shadow: -7px 0px 5px black;
+  border-radius: 5px 0px 0px 5px;
+  width: 8%;
   position: fixed;
   top: 0;
   right: 0;
-  margin: 20px;
-  font-size: 50px;
+  margin: 20px 0px;
+  padding: 10px;
+  font-size: 26px;
   border: none;
   color: #DBDBDB;
+}
+
+#refreshButton:hover {
+  box-shadow: none;
+  background-color: #DBDBDB;
+  color: #232323;
+  width: 14%;
+  transition: background-color 0.3s, box-shadow 0.3s, width 0.3s, color 0.3s;
 }

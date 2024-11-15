@@ -8,7 +8,7 @@
     </head>
     <body>
 
-        <button id="refreshButton"> ↻ </button>
+        <button id="refreshButton"> Refresh </button>
 
         <div class="imageContainer">
             <a id="imgLink" href="#"><img alt="Random Image" id="ranImg" src="" /></a>
@@ -19,29 +19,32 @@
         </div>
 
         <script>
-            function fetchImage() {
-                fetch('/api/random-content')
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Error fetching image and quote data');
-                        }
-                        return response.json();
-                    })
+            function fetchContent(category = 'random') {
+                fetch(`/api/random-content?category=${category}`)
+                    .then(response => response.json())
                     .then(data => {
                         document.getElementById('ranImg').src = data.url;
                         document.getElementById('imgLink').href = data.link;
-                        document.getElementById('quote').textContent = data.quote || 'Quote unavailable';
+                        document.getElementById('quote').textContent = data.quote;
+                        console.log('Quote Category:', data.quoteCategory || 'N/A');
+                        console.log('Image Title:', data.imageTitle || 'N/A');
                     })
                     .catch(err => {
                         console.error(err);
                         document.getElementById('ranImg').src = '';
                         document.getElementById('imgLink').href = '#';
-                        document.getElementById('quote').textContent = 'Error loading quote';
+                        document.getElementById('quote').textContent = 'Error loading content';
                     });
             }
 
-            document.getElementById('refreshButton').addEventListener('click', fetchImage);
-            fetchImage();
+            document.getElementById('refreshButton').addEventListener('click', () => {
+                const categoryInput = document.getElementById('categoryInput');
+                const category = categoryInput ? categoryInput.value.trim() : 'random';
+                fetchContent(category || 'random');
+            });
+
+            fetchContent();
         </script>
+
     </body>
 </html>

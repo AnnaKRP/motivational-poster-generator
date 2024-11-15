@@ -27,35 +27,51 @@ app.get('/api/random-content', async (req, res) => {
       return res.status(500).json({ message: 'API keys are missing' });
     }
 
-    // Fetch a random image from Unsplash
-    const unsplashResponse = await fetch(`https://api.unsplash.com/photos/random/?client_id=${clientID}`);
+    // Fetch a random quote
+    const quoteResponse = await fetch('https://api.api-ninjas.com/v1/quotes', {
+      headers: { 'X-Api-Key': quoteApiKey },
+    });
+
+    if (!quoteResponse.ok) {
+      const errorText = await quoteResponse.text();
+      console.error('Quotes API Error:', errorText);
+      return res.status(500).json({ message: 'Failed to fetch quote' });
+    }
+
+    const quoteData = await quoteResponse.json();
+    const quote = quoteData[0]?.quote || 'No quote available';
+
+    // Choose quote's category
+    const allowedCategories = ['life', 'success', 'alone', 'happiness', 'love'];
+    const category = allowedCategories[Math.floor(Math.random() * allowedCategories.length)];
+
+
+    // Fetch an image based on the quote's category
+    const unsplashResponse = await fetch(
+      `https://api.unsplash.com/photos/random?query=${category}&client_id=${clientID}`
+    );
+
     if (!unsplashResponse.ok) {
       const errorText = await unsplashResponse.text();
       console.error('Unsplash API Error:', errorText);
       return res.status(500).json({ message: 'Failed to fetch image from Unsplash' });
     }
-    const unsplashData = await unsplashResponse.json();
 
-    // Fetch a random quote from the Quotes API
-    const quoteResponse = await fetch('https://api.api-ninjas.com/v1/quotes', {
-      headers: { 'X-Api-Key': quoteApiKey },
-    });
-    if (!quoteResponse.ok) {
-      const errorText = await quoteResponse.text();
-      console.error('Quote API Error:', errorText);
-      return res.status(500).json({ message: 'Failed to fetch quote' });
-    }
-    const quoteData = await quoteResponse.json();
-    console.log('Quote Data:', quoteData);
+    const unsplashData = await unsplashResponse.json();
+    const imageTitle = unsplashData.alt_description || 'Untitled';
 
     // Combine image and quote data
-    const imageData = {
+    const contentData = {
       url: unsplashData.urls.regular,
       link: unsplashData.links.html,
-      quote: quoteData[0]?.quote,
+      quote: quote,
+      category: category,
+      quoteCategory: category,
+      imageTitle: imageTitle,
     };
-
-    res.json(imageData);
+    
+    console.log('Response Data:', contentData); 
+    res.json(contentData);
   } catch (error) {
     console.error('Error fetching data:', error);
     res.status(500).json({ message: 'Error fetching data' });
